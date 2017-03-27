@@ -1,4 +1,4 @@
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views import generic
@@ -23,7 +23,7 @@ class DetailView(generic.DetailView):
     template_name = 'polls/detail.html'
 
     def get_queryset(self):
-        # filter questions from the future 
+        # filter questions from the future
         return Question.objects.filter(
             pub_date__lte=timezone.now()
         )
@@ -45,7 +45,7 @@ def vote(request, question_id):
     else:
         selected_choice.votes += 1
         selected_choice.save()
-        return HttpResponseRedirect(reverse('polls:results', args=(question.id)))
+        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
 
 def results(request, question_id):
     print("In results?!?")
